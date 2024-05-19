@@ -11,7 +11,7 @@ import ru.sfu.zooshop.entity.AuthorityEntity;
 import ru.sfu.zooshop.entity.RoleEntity;
 import ru.sfu.zooshop.entity.UserEntity;
 import ru.sfu.zooshop.exception.ApiException;
-import ru.sfu.zooshop.mapper.admin.AdminMapper;
+import ru.sfu.zooshop.mapper.AdminMapper;
 import ru.sfu.zooshop.repository.RoleRepository;
 import ru.sfu.zooshop.repository.UserRepository;
 import ru.sfu.zooshop.service.AuthorityService;
@@ -31,7 +31,7 @@ import static ru.sfu.zooshop.constant.Constant.*;
 public class RoleServiceImpl implements RoleService {
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
-  private final AdminMapper roleMapper;
+  private final AdminMapper adminMapper;
   private final AuthorityService authorityService;
 
   private void validateId(Long id) {
@@ -59,7 +59,7 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public AllRolesResponse getRoles() {
     List<BasicRoleResponse> roles = roleRepository.findAll().stream()
-      .map(roleMapper::roleEntityToBasicRoleResponse)
+      .map(adminMapper::roleEntityToBasicRoleResponse)
       .toList();
     return new AllRolesResponse(roles);
   }
@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public RichRoleResponse getRoleById(Long id) {
     RoleEntity role = findRoleById(id);
-    return roleMapper.roleEntityToRichRoleResponse(role);
+    return adminMapper.roleEntityToRichRoleResponse(role);
   }
 
   @Override

@@ -16,6 +16,9 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
   name = "recovery_codes",
   indexes = {
     @Index(name = "ix_recovery_codes_user_id", columnList = "user_id"),
+  },
+  uniqueConstraints = {
+    @UniqueConstraint(name = "unique_user_recovery_code", columnNames = {"user_id", "recovery_code"})
   }
 )
 public class RecoveryCodeEntity extends BaseEntity {

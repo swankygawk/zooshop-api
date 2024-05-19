@@ -1,11 +1,15 @@
 package ru.sfu.zooshop.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Getter
 @Setter
@@ -35,8 +39,21 @@ public class CategoryEntity extends BaseEntity {
   @ColumnDefault("null")
   private String pictureUrl;
 
-  @OneToMany(mappedBy = "parent")
-  private List<SubcategoryEntity> children = new ArrayList<>();
+  @Column(nullable = false)
+  @ColumnDefault("false")
+  private boolean hidden;
+
+  @OneToMany(
+    fetch = LAZY,
+    mappedBy = "parent"
+  )
+  private List<SubcategoryEntity> children;
+
+  @OneToMany(
+    fetch = LAZY,
+    mappedBy = "category"
+  )
+  private List<ProductEntity> products;
 
   public CategoryEntity(String name, String slug) {
     super();

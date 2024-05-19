@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,6 +18,10 @@ import org.hibernate.annotations.ColumnDefault;
   name = "subcategories",
   indexes = {
     @Index(name = "ix_subcategories_slug", columnList = "slug")
+  },
+  uniqueConstraints = {
+    @UniqueConstraint(name = "unique_parent_id_name", columnNames = {"parent_id", "name"}),
+    @UniqueConstraint(name = "unique_parent_id_slug", columnNames = {"parent_id", "slug"})
   }
 )
 public class SubcategoryEntity extends BaseEntity {
@@ -27,13 +35,11 @@ public class SubcategoryEntity extends BaseEntity {
   private CategoryEntity parent;
 
   @Column(
-    unique = true,
     nullable = false
   )
   private String name;
 
   @Column(
-    unique = true,
     nullable = false
   )
   private String slug;
@@ -41,10 +47,21 @@ public class SubcategoryEntity extends BaseEntity {
   @ColumnDefault("null")
   private String pictureUrl;
 
+  @Column(nullable = false)
+  @ColumnDefault("false")
+  private boolean hidden;
+
+  @OneToMany(
+    fetch = LAZY,
+    mappedBy = "subcategory"
+  )
+  private List<ProductEntity> products;
+
   public SubcategoryEntity(CategoryEntity parent, String name, String slug) {
     super();
     this.parent = parent;
     this.name = name;
     this.slug = slug;
+    this.hidden = parent.isHidden();
   }
 }

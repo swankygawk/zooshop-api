@@ -29,11 +29,11 @@ public class MatchingValuesValidator implements ConstraintValidator<MatchingValu
     try {
       fieldValue = beanWrapper.getPropertyValue(this.getFieldName());
       matchingFieldValue = beanWrapper.getPropertyValue(this.getMatchingFieldName());
-    } catch (Exception exception) {
+    } catch (Exception _) {
       return false;
     }
 
-    boolean valid = Objects.equals(fieldValue, matchingFieldValue) && fieldValue != null;
+    boolean valid = Objects.deepEquals(fieldValue, matchingFieldValue) && fieldValue != null;
     if (!valid) {
       context.disableDefaultConstraintViolation();
       context.buildConstraintViolationWithTemplate(this.message)

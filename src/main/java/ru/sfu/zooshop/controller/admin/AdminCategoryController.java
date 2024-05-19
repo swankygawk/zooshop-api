@@ -2,8 +2,9 @@ package ru.sfu.zooshop.controller.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sfu.zooshop.dto.request.admin.category.CategoryRequest;
 import ru.sfu.zooshop.dto.response.Response;
+import ru.sfu.zooshop.dto.response.admin.category.AdminAllCategoriesResponse;
+import ru.sfu.zooshop.dto.response.admin.category.AdminRichCategoryResponse;
 import ru.sfu.zooshop.service.admin.AdminCategoryService;
 
 import java.net.URI;
@@ -26,21 +29,48 @@ import static ru.sfu.zooshop.utility.ResponseUtility.getResponse;
 public class AdminCategoryController {
   private final AdminCategoryService adminCategoryService;
 
-  private URI getCategoryUri(Long id) {
-    return URI.create("http://localhost:8080/api/v1/admin/category/" + id.toString());
+  private URI getCategoryUri(String slug) {
+    return URI.create("http://localhost:8080/api/v1/admin/category/" + slug);
   }
 
-  // get rich all categories info
-  // get rich category info
+  @GetMapping
+  @PreAuthorize("hasAuthority('CATEGORY:READ')")
+  public ResponseEntity<Response> getAll(
+    HttpServletRequest request
+  ) {
+    AdminAllCategoriesResponse categories = adminCategoryService.getCategories();
+    return ResponseEntity.ok(getResponse(
+      request,
+      OK,
+      "Categories retrieved",
+      categories
+    ));
+  }
+
+  @GetMapping("/{slug}")
+  @PreAuthorize("hasAuthority('CATEGORY:READ')")
+  public ResponseEntity<Response> get(
+    HttpServletRequest request,
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug,
+    Pageable pageable
+  ) {
+    AdminRichCategoryResponse category = adminCategoryService.getCategory(slug, pageable);
+    return ResponseEntity.ok(getResponse(
+      request,
+      OK,
+      "Category retrieved",
+      category
+    ));
+  }
 
   @PostMapping
   @PreAuthorize("hasAuthority('CATEGORY:CREATE')")
-  public ResponseEntity<Response> createCategory(
+  public ResponseEntity<Response> create(
     HttpServletRequest request,
     @RequestBody @Valid CategoryRequest categoryRequest
   ) {
-    Long id = adminCategoryService.createCategory(categoryRequest);
-    return ResponseEntity.created(getCategoryUri(id)).body(getResponse(
+    String slug = adminCategoryService.createCategory(categoryRequest);
+    return ResponseEntity.created(getCategoryUri(slug)).body(getResponse(
       request,
       CREATED,
       "Category created",
@@ -48,14 +78,14 @@ public class AdminCategoryController {
     ));
   }
 
-  @PatchMapping("/{id}/update")
+  @PatchMapping("/{slug}/update")
   @PreAuthorize("hasAuthority('CATEGORY:UPDATE')")
-  public ResponseEntity<Response> updateCategory(
+  public ResponseEntity<Response> update(
     HttpServletRequest request,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug,
     @RequestBody @Valid CategoryRequest categoryRequest
   ) {
-    adminCategoryService.updateCategory(id, categoryRequest);
+    adminCategoryService.updateCategory(slug, categoryRequest);
     return ResponseEntity.ok(getResponse(
       request,
       OK,
@@ -64,33 +94,63 @@ public class AdminCategoryController {
     ));
   }
 
-  @PutMapping("/{id}/update/picture")
+  @PutMapping("/{slug}/update/picture")
   @PreAuthorize("hasAuthority('CATEGORY:UPDATE')")
-  public ResponseEntity<Response> updateCategoryPicture(
+  public ResponseEntity<Response> updatePicture(
     HttpServletRequest request,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug,
     @RequestParam("file") MultipartFile file
   ) {
-    adminCategoryService.updateCategoryPicture(id, file);
+    adminCategoryService.updateCategoryPicture(slug, file);
     return ResponseEntity.ok(getResponse(
       request,
       OK,
-      "Category picture updated",
+      "Category productpicture updated",
       null
     ));
   }
 
-  @DeleteMapping("/{id}/update/picture")
+  @DeleteMapping("/{slug}/update/picture")
   @PreAuthorize("hasAuthority('CATEGORY:UPDATE')")
-  public ResponseEntity<Response> deleteCategoryPicture(
+  public ResponseEntity<Response> deletePicture(
     HttpServletRequest request,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug
   ) {
-    adminCategoryService.deleteCategoryPicture(id);
+    adminCategoryService.deleteCategoryPicture(slug);
     return ResponseEntity.ok(getResponse(
       request,
       OK,
-      "Category picture deleted",
+      "Category productpicture deleted",
+      null
+    ));
+  }
+
+  @PatchMapping("/{slug}/update/hide")
+  @PreAuthorize("hasAuthority('CATEGORY:UPDATE')")
+  public ResponseEntity<Response> hide(
+    HttpServletRequest request,
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug
+  ) {
+    adminCategoryService.toggleCategoryVisibility(slug, true);
+    return ResponseEntity.ok(getResponse(
+      request,
+      OK,
+      "Category hidden",
+      null
+    ));
+  }
+
+  @PatchMapping("/{slug}/update/show")
+  @PreAuthorize("hasAuthority('CATEGORY:UPDATE')")
+  public ResponseEntity<Response> show(
+    HttpServletRequest request,
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug
+  ) {
+    adminCategoryService.toggleCategoryVisibility(slug, false);
+    return ResponseEntity.ok(getResponse(
+      request,
+      OK,
+      "Category shown",
       null
     ));
   }

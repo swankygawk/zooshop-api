@@ -2,6 +2,7 @@ package ru.sfu.zooshop.controller.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import ru.sfu.zooshop.dto.response.Response;
 import ru.sfu.zooshop.dto.response.user.address.AddressResponse;
 import ru.sfu.zooshop.dto.response.user.address.AllAddressesResponse;
 import ru.sfu.zooshop.security.user.AuthenticatedUser;
-import ru.sfu.zooshop.service.UserService;
+import ru.sfu.zooshop.service.AddressService;
 
 import java.net.URI;
 
@@ -27,10 +28,10 @@ import static ru.sfu.zooshop.utility.ResponseUtility.getResponse;
 @RequestMapping("/user/address")
 @Validated
 public class AddressController {
-  private final UserService userService;
+  private final AddressService addressService;
 
   private URI getAddressUri(Long id) {
-    return URI.create("http://localhost:8080/api/v1/user/address/" + id.toString());
+    return URI.create("http://localhost:8080/api/v1/user/address/" + id);
   }
 
   @GetMapping
@@ -39,7 +40,7 @@ public class AddressController {
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser user
   ) {
-    AllAddressesResponse addresses = userService.getAddresses(user.getId());
+    AllAddressesResponse addresses = addressService.getAddresses(user.getId());
     return ResponseEntity.ok(getResponse(
       request,
       OK,
@@ -53,9 +54,9 @@ public class AddressController {
   public ResponseEntity<Response> getAddress(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser user,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
+    @PathVariable("id") @NotNull(message = "Address ID must not be null") @PositiveOrZero(message = "Address ID must be greater or equal to 0") Long id
   ) {
-    AddressResponse address = userService.getAddress(user.getId(), id);
+    AddressResponse address = addressService.getAddress(user.getId(), id);
     return ResponseEntity.ok(getResponse(
       request,
       OK,
@@ -68,10 +69,9 @@ public class AddressController {
   @PreAuthorize("hasAuthority('ADDRESS:CREATE_OWN')")
   public ResponseEntity<Response> createAddress(
     HttpServletRequest request,
-    @AuthenticationPrincipal AuthenticatedUser user,
     @RequestBody @Valid AddressRequest address
   ) {
-    Long id = userService.createAddress(user.getId(), address);
+    Long id = addressService.createAddress(address);
     return ResponseEntity.created(getAddressUri(id)).body(getResponse(
       request,
       CREATED,
@@ -85,10 +85,10 @@ public class AddressController {
   public ResponseEntity<Response> updateAddress(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser user,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
+    @PathVariable("id") @NotNull(message = "Address ID must not be null") @PositiveOrZero(message = "Address ID must be greater or equal to 0") Long id,
     @RequestBody @Valid AddressRequest address
   ) {
-    userService.updateAddress(user.getId(), id, address);
+    addressService.updateAddress(id, user.getId(), address);
     return ResponseEntity.ok(getResponse(
       request,
       OK,
@@ -102,9 +102,9 @@ public class AddressController {
   public ResponseEntity<Response> deleteAddress(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser user,
-    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
+    @PathVariable("id") @NotNull(message = "Address ID must not be null") @PositiveOrZero(message = "Address ID must be greater or equal to 0") Long id
   ) {
-    userService.deleteAddress(user.getId(), id);
+    addressService.deleteAddress(id, user.getId());
     return ResponseEntity.ok(getResponse(
       request,
       OK,

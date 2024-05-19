@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ActionConfirmationRequest {
+  @NotBlank(message = "Password must not be empty")
   @Size(
     min = 8,
     max = 255,
     message = "Password must be 8-255 characters long"
   )
-  @NotBlank(message = "Password must not be empty")
   private String password;
 }

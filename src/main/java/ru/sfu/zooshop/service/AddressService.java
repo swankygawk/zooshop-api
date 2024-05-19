@@ -1,15 +1,13 @@
 package ru.sfu.zooshop.service;
 
 import ru.sfu.zooshop.dto.request.user.address.AddressRequest;
-import ru.sfu.zooshop.entity.AddressEntity;
-import ru.sfu.zooshop.entity.UserEntity;
-
-import java.util.List;
+import ru.sfu.zooshop.dto.response.user.address.AddressResponse;
+import ru.sfu.zooshop.dto.response.user.address.AllAddressesResponse;
 
 public interface AddressService {
-  List<AddressEntity> getAddresses(UserEntity user);
-  AddressEntity getAddressById(UserEntity user, Long id);
-  Long createAddress(UserEntity user, AddressRequest request);
-  void updateAddress(UserEntity user, Long id, AddressRequest request);
-  void deleteAddress(UserEntity user, Long id);
+  AllAddressesResponse getAddresses(Long userId);
+  AddressResponse getAddress(Long id, Long userId);
+  Long createAddress(AddressRequest request);
+  void updateAddress(Long id, Long userId, AddressRequest request);
+  void deleteAddress(Long id, Long userId);
 }

@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import ru.sfu.zooshop.dto.response.ValidationFailureResponse;
 import ru.sfu.zooshop.dto.response.Response;
 import ru.sfu.zooshop.exception.ApiException;
-import ru.sfu.zooshop.mapper.system.SystemMapper;
+import ru.sfu.zooshop.mapper.SystemMapper;
 
 import java.util.List;
 
@@ -110,4 +110,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     );
   }
 
+  // todo
 }

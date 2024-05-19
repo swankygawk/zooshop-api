@@ -9,7 +9,7 @@ public enum FileType {
   PROFILE_PICTURE("/picture/profile/"),
   CATEGORY_PICTURE("/picture/category/"),
   SUBCATEGORY_PICTURE("/picture/subcategory/"),
-  PRODUCT_IMAGE("/picture/product/");
+  PRODUCT_PICTURE("/picture/product/");
 
   private final String locationOnServer;
 }

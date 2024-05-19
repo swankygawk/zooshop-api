@@ -3,6 +3,7 @@ package ru.sfu.zooshop.controller.open;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class CategoryController {
   private final CategoryService categoryService;
 
   @GetMapping
-  public ResponseEntity<Response> getCategories(HttpServletRequest request) {
+  public ResponseEntity<Response> getAll(HttpServletRequest request) {
     AllCategoriesResponse categories = categoryService.getCategories();
     return ResponseEntity.ok(getResponse(
       request,
@@ -35,26 +36,13 @@ public class CategoryController {
     ));
   }
 
-//  @GetMapping("/{id}")
-//  public ResponseEntity<Response> getCategoryById(
-//    HttpServletRequest request,
-//    @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
-//  ) {
-//    RichCategoryResponse category = categoryService.getCategoryById(id);
-//    return ResponseEntity.ok(getResponse(
-//      request,
-//      OK,
-//      "Category retrieved",
-//      category
-//    ));
-//  }
-
   @GetMapping("/{slug}")
-  public ResponseEntity<Response> getCategoryBySlug(
+  public ResponseEntity<Response> get(
     HttpServletRequest request,
-    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug
+    @PathVariable("slug") @NotBlank(message = "Slug must not be empty") String slug,
+    Pageable pageable
   ) {
-    RichCategoryResponse category = categoryService.getCategoryBySlug(slug);
+    RichCategoryResponse category = categoryService.getCategoryBySlug(slug, pageable);
     return ResponseEntity.ok(getResponse(
       request,
       OK,

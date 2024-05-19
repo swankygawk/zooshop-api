@@ -118,7 +118,7 @@ public class UserController {
     return ResponseEntity.ok(getResponse(
       request,
       OK,
-      "Profile picture updated",
+      "Profile productpicture updated",
       null
     ));
   }
@@ -132,7 +132,7 @@ public class UserController {
     return ResponseEntity.ok(getResponse(
       request,
       OK,
-      "Profile picture deleted",
+      "Profile productpicture deleted",
       null
     ));
   }

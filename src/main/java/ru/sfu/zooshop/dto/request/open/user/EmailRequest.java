@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EmailRequest {
-  @Email(message = "Invalid email")
+  @NotBlank(message = "Email must not be empty")
   @Size(
     max = 255,
     message = "Email must be at most 255 characters long"
   )
-  @NotBlank(message = "Email must not be empty")
+  @Email(message = "Invalid email")
   private String email;
 }

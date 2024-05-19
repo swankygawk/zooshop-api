@@ -1,4 +1,4 @@
-package ru.sfu.zooshop.mapper.system;
+package ru.sfu.zooshop.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

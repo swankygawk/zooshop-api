@@ -20,19 +20,19 @@ import ru.sfu.zooshop.constraint.MatchingValues;
   message = "New password and new password confirmation must match"
 )
 public class PasswordResetRequest {
+  @NotBlank(message = "New password must not be empty")
   @Size(
     min = 8,
     max = 255,
     message = "New password must be 8-255 characters long"
   )
-  @NotBlank(message = "New password must not be empty")
   private String newPassword;
 
+  @NotBlank(message = "New password confirmation must not be empty")
   @Size(
     min = 8,
     max = 255,
     message = "New password confirmation must be 8-255 characters long"
   )
-  @NotBlank(message = "New password confirmation must not be empty")
   private String newPasswordConfirmation;
 }

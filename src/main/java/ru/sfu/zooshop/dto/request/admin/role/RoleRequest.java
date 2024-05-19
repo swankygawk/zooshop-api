@@ -16,11 +16,11 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RoleRequest {
+  @NotBlank(message = "Name must not be empty")
   @Size(
     max = 255,
     message = "Name must be at most 255 characters long"
   )
-  @NotBlank(message = "Name must not be empty")
   private String name;
 
   private Set<Long> authorities;

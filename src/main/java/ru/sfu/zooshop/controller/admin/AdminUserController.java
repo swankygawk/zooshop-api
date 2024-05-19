@@ -10,9 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.sfu.zooshop.dto.request.admin.role.UserRoleUpdateRequest;
 import ru.sfu.zooshop.dto.request.admin.user.UserEmailUpdateRequest;
 import ru.sfu.zooshop.dto.request.admin.user.UserProfileUpdateRequest;
-import ru.sfu.zooshop.dto.request.admin.role.UserRoleUpdateRequest;
 import ru.sfu.zooshop.dto.response.Response;
 import ru.sfu.zooshop.dto.response.admin.user.AllUsersResponse;
 import ru.sfu.zooshop.dto.response.admin.user.RichUserResponse;
@@ -31,7 +31,7 @@ public class AdminUserController {
 
   @GetMapping
   @PreAuthorize("hasAuthority('USER:READ')")
-  public ResponseEntity<Response> getUsers(
+  public ResponseEntity<Response> getAll(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     Pageable pageable
@@ -47,7 +47,7 @@ public class AdminUserController {
 
   @GetMapping("/{id}")
   @PreAuthorize("hasAuthority('USER:READ')")
-  public ResponseEntity<Response> getUser(
+  public ResponseEntity<Response> get(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
@@ -63,7 +63,7 @@ public class AdminUserController {
 
   @PatchMapping("/{id}/update/profile")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> updateUserProfile(
+  public ResponseEntity<Response> updateProfile(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
@@ -80,7 +80,7 @@ public class AdminUserController {
 
   @PatchMapping("/{id}/update/email")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> updateUserEmail(
+  public ResponseEntity<Response> updateEmail(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
@@ -97,7 +97,7 @@ public class AdminUserController {
 
   @DeleteMapping("/{id}/update/picture")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> deleteUserProfilePicture(
+  public ResponseEntity<Response> deleteProfilePicture(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
@@ -106,14 +106,14 @@ public class AdminUserController {
     return ResponseEntity.ok(getResponse(
       request,
       OK,
-      "User's profile picture deleted",
+      "User's profile productpicture deleted",
       null
     ));
   }
 
   @PatchMapping("/{id}/lock")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> lockUserAccount(
+  public ResponseEntity<Response> lockAccount(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
@@ -129,7 +129,7 @@ public class AdminUserController {
 
   @PatchMapping("/{id}/unlock")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> unlockUserAccount(
+  public ResponseEntity<Response> unlockAccount(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
@@ -145,7 +145,7 @@ public class AdminUserController {
 
   @PatchMapping("/{id}/mfa/disable")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> disableUserMfa(
+  public ResponseEntity<Response> disableMfa(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
@@ -161,7 +161,7 @@ public class AdminUserController {
 
   @PatchMapping("/{id}/update/role")
   @PreAuthorize("hasAuthority('USER:UPDATE')")
-  public ResponseEntity<Response> updateUserRole(
+  public ResponseEntity<Response> updateRole(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id,
@@ -178,11 +178,19 @@ public class AdminUserController {
 
   @GetMapping("/{id}/address")
   @PreAuthorize("hasAuthority('ADDRESS:READ')")
-  public ResponseEntity<Response> getUserAddresses(
+  public ResponseEntity<Response> getAddresses(
     HttpServletRequest request,
     @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
     @PathVariable("id") @PositiveOrZero(message = "ID must be greater or equal to 0") Long id
     ) {
     return null;
   }
+
+  // favorite products
+
+  // orders
+
+  // ratings
+
+  // comments
 }

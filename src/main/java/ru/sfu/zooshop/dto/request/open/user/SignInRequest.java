@@ -13,20 +13,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SignInRequest {
-  @Email(message = "Invalid email")
+  @NotBlank(message = "Email must not be empty")
   @Size(
     max = 255,
     message = "Email must be at most 255 characters long"
   )
-  @NotBlank(message = "Email must not be empty")
+  @Email(message = "Invalid email")
   private String email;
 
+  @NotBlank(message = "Password must not be empty")
   @Size(
     min = 8,
     max = 255,
     message = "Password must be 8-255 characters long"
   )
-  @NotBlank(message = "Password must not be empty")
   private String password;
 
   // TODO change 6 to constant

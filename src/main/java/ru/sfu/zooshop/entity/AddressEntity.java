@@ -1,11 +1,9 @@
 package ru.sfu.zooshop.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-
-import static jakarta.persistence.FetchType.LAZY;
-import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Getter
 @Setter
@@ -17,18 +15,6 @@ import static org.hibernate.annotations.OnDeleteAction.CASCADE;
   name = "addresses"
 )
 public class AddressEntity extends BaseEntity {
-  @ManyToOne(
-    fetch = LAZY,
-    optional = false
-  )
-  @JoinColumn(
-    name = "user_id",
-    nullable = false,
-    updatable = false
-  )
-  @OnDelete(action = CASCADE)
-  private UserEntity user;
-
   @Column(nullable = false)
   private String city;
 

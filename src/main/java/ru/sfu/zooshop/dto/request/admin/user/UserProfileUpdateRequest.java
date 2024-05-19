@@ -14,23 +14,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileUpdateRequest {
+  @NotBlank(message = "First name must not be empty")
   @Size(
     max = 255,
     message = "First name must be at most 255 characters long"
   )
-  @NotBlank(message = "First name must not be empty")
   private String firstName;
 
+  @NotBlank(message = "Last name must not be empty")
   @Size(
     max = 255,
     message = "Last name must be at most 255 characters long"
   )
-  @NotBlank(message = "Last name must not be empty")
   private String lastName;
-
-  @Size(
-    max = 255,
-    message = "Phone must be at most 255 characters long"
-  )
-  private String phone;
 }

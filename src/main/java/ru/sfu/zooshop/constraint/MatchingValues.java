@@ -15,8 +15,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * The values of the two fields (of the annotated type) with given names
- * ({@link #fieldName()} and {@link #matchingFieldName()}) must match exactly.
- * They will be compared with {@code Objects.equals()}.
+ * ({@link #fieldName} and {@link #matchingFieldName}) must match exactly.
+ * They will be compared with {@code Objects.deepEquals()}. Null values are considered invalid.
  * The fields with given names must be present and of the same type
  *
  * @author Andrey Nosov
@@ -30,12 +30,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = MatchingValuesValidator.class)
 public @interface MatchingValues {
   /**
-   * @return the name of the field whose value must match the {@link #matchingFieldName()} value
+   * @return the name of the field whose value must match the {@link #matchingFieldName} value
    */
   String fieldName();
 
   /**
-   * @return the name of the field whose value must match the {@link #fieldName()} value
+   * @return the name of the field whose value must match the {@link #fieldName} value
    */
   String matchingFieldName();
 

@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Constant {
@@ -13,8 +12,6 @@ public class Constant {
   public static final Long ADMIN_ID = 5L;
   public static final Long ADMIN_ROLE_ID = 3L;
   public static final Long USER_ROLE_ID = 6L;
-//  public static final String SYSTEM_ROLE = "SYSTEM";
-//  public static final String ADMIN_ROLE = "ADMIN";
   public static final Path FILE_STORAGE_LOCATION = Paths.get(System.getProperty("user.dir") + "/upload").toAbsolutePath().normalize();
   public static final Path PROFILE_PICTURE_STORAGE_LOCATION = Paths.get(FILE_STORAGE_LOCATION.toString(), "/profile").toAbsolutePath().normalize();
   public static final Path CATEGORY_PICTURE_STORAGE_LOCATION = Paths.get(FILE_STORAGE_LOCATION.toString(), "/category").toAbsolutePath().normalize();
@@ -28,11 +25,7 @@ public class Constant {
   public static final String CONTEXT_PATH = "/api/v1";
   public static final String ZOOSHOP = "ZooShop";
   public static final Set<String> ZOOSHOP_USERS = Set.of("ZooShop Users");
-//  public static final String EMPTY_VALUE = "empty";
-//  public static final String ROLE_PREFIX = "ROLE_";
   public static final String ROLE = "role";
-//  public static final String AUTHORITY_DELIMITER = ",";
-//  public static final String AUTHORITIES = "authorities";
   public static final Long JWT_ACCESS_EXPIRATION = 1_800_000L; // 30 minutes in milliseconds
   public static final Integer JWT_ACCESS_EXPIRATION_SECONDS = (int) (JWT_ACCESS_EXPIRATION / 1000); // 30 minutes in seconds
   public static final Long JWT_REFRESH_EXPIRATION = 3_600_000L; // 1 hour in milliseconds

@@ -14,24 +14,17 @@ import ru.sfu.zooshop.dto.request.user.user.ActionConfirmationRequest;
 import ru.sfu.zooshop.dto.request.user.user.EmailUpdateRequest;
 import ru.sfu.zooshop.dto.request.user.user.PasswordUpdateRequest;
 import ru.sfu.zooshop.dto.request.user.user.ProfileRequest;
-import ru.sfu.zooshop.dto.request.user.address.AddressRequest;
-import ru.sfu.zooshop.dto.response.user.address.AddressResponse;
-import ru.sfu.zooshop.dto.response.user.address.AllAddressesResponse;
 import ru.sfu.zooshop.dto.response.user.user.MfaEnabledResponse;
-import ru.sfu.zooshop.dto.response.user.user.RecoveryCodesResetResponse;
 import ru.sfu.zooshop.dto.response.user.user.ProfileResponse;
-import ru.sfu.zooshop.entity.AddressEntity;
+import ru.sfu.zooshop.dto.response.user.user.RecoveryCodesResetResponse;
 import ru.sfu.zooshop.entity.TokenEntity;
 import ru.sfu.zooshop.entity.UserEntity;
 import ru.sfu.zooshop.event.UserEvent;
 import ru.sfu.zooshop.exception.ApiException;
-import ru.sfu.zooshop.mapper.user.UserMapper;
+import ru.sfu.zooshop.mapper.UserMapper;
 import ru.sfu.zooshop.repository.UserRepository;
 import ru.sfu.zooshop.service.*;
-import ru.sfu.zooshop.service.EmailService;
-import ru.sfu.zooshop.service.FileService;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -53,7 +46,6 @@ public class UserServiceImpl implements UserService {
   private final EmailService emailService;
   private final TokenService tokenService;
   private final MfaService mfaService;
-  private final AddressService addressService;
   private final FileService fileService;
   private final ApplicationEventPublisher eventPublisher;
   private final UserMapper userMapper;
@@ -176,7 +168,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public void deleteProfilePicture(Long id) {
     UserEntity user = findUserById(id);
-    if (user.getProfilePictureUrl() == null) throw new ApiException(BAD_REQUEST, "You do not have a profile picture");
+    if (user.getProfilePictureUrl() == null) throw new ApiException(BAD_REQUEST, "You do not have a profile productpicture");
     user.setProfilePictureUrl(null);
     userRepository.save(user);
     fileService.deleteFile(PROFILE_PICTURE_STORAGE_LOCATION, user.getReferenceId() + ".png");
@@ -189,39 +181,5 @@ public class UserServiceImpl implements UserService {
     user.setLastName(request.getLastName());
     user.setPhone(request.getPhone());
     userRepository.save(user);
-  }
-
-  @Override
-  public AllAddressesResponse getAddresses(Long id) {
-    UserEntity user = findUserById(id);
-    List<AddressResponse> addresses = addressService.getAddresses(user).stream()
-      .map(userMapper::addressEntityToAddressResponse)
-      .toList();
-    return new AllAddressesResponse(addresses);
-  }
-
-  @Override
-  public AddressResponse getAddress(Long id, Long addressId) {
-    UserEntity user = findUserById(id);
-    AddressEntity address = addressService.getAddressById(user, addressId);
-    return userMapper.addressEntityToAddressResponse(address);
-  }
-
-  @Override
-  public Long createAddress(Long id, AddressRequest request) {
-    UserEntity user = findUserById(id);
-    return addressService.createAddress(user, request);
-  }
-
-  @Override
-  public void updateAddress(Long id, Long addressId, AddressRequest request) {
-    UserEntity user = findUserById(id);
-    addressService.updateAddress(user, addressId, request);
-  }
-
-  @Override
-  public void deleteAddress(Long id, Long addressId) {
-    UserEntity user = findUserById(id);
-    addressService.deleteAddress(user, addressId);
   }
 }

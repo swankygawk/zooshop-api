@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRoleUpdateRequest {
-  @PositiveOrZero(message = "ID must be greater or equal to 0")
-  @NotNull(message = "ID must not be null")
-  private Long id;
+  @NotNull(message = "Role ID must not be null")
+  @PositiveOrZero(message = "Role ID must be greater or equal to 0")
+  private Long roleId;
 }

@@ -7,7 +7,7 @@ import ru.sfu.zooshop.dto.response.admin.authority.AllAuthoritiesResponse;
 import ru.sfu.zooshop.dto.response.admin.authority.AuthorityResponse;
 import ru.sfu.zooshop.entity.AuthorityEntity;
 import ru.sfu.zooshop.exception.ApiException;
-import ru.sfu.zooshop.mapper.admin.AdminMapper;
+import ru.sfu.zooshop.mapper.AdminMapper;
 import ru.sfu.zooshop.repository.AuthorityRepository;
 import ru.sfu.zooshop.service.AuthorityService;
 
@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Transactional(rollbackOn = Exception.class)
 public class AuthorityServiceImpl implements AuthorityService {
   private final AuthorityRepository authorityRepository;
-  private final AdminMapper adminAuthorityMapper;
+  private final AdminMapper adminMapper;
 
   @Override
   public AuthorityEntity findById(Long id) {
@@ -32,7 +32,7 @@ public class AuthorityServiceImpl implements AuthorityService {
   @Override
   public AllAuthoritiesResponse getAuthorities() {
     Set<AuthorityResponse> authorities = authorityRepository.findAll().stream()
-      .map(adminAuthorityMapper::authorityEntityToAuthorityResponse)
+      .map(adminMapper::authorityEntityToAuthorityResponse)
       .collect(toSet());
     return new AllAuthoritiesResponse(authorities);
   }

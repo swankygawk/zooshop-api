@@ -14,7 +14,7 @@ import ru.sfu.zooshop.dto.response.admin.user.RichUserResponse;
 import ru.sfu.zooshop.entity.RoleEntity;
 import ru.sfu.zooshop.entity.UserEntity;
 import ru.sfu.zooshop.exception.ApiException;
-import ru.sfu.zooshop.mapper.admin.AdminMapper;
+import ru.sfu.zooshop.mapper.AdminMapper;
 import ru.sfu.zooshop.repository.UserRepository;
 import ru.sfu.zooshop.service.admin.AdminUserService;
 import ru.sfu.zooshop.service.EmailService;
@@ -68,16 +68,15 @@ public class AdminUserServiceImpl implements AdminUserService {
     UserEntity user = userService.findUserById(id);
     user.setFirstName(request.getFirstName());
     user.setLastName(request.getLastName());
-    user.setPhone(request.getPhone());
     userRepository.save(user);
   }
 
   @Override
   public void updateUserEmail(Long authenticatedUserId, Long id, UserEmailUpdateRequest request) {
     validateId(authenticatedUserId, id);
-    emailService.validateEmail(request.getNewEmail());
+    emailService.validateEmail(request.getEmail());
     UserEntity user = userService.findUserById(id);
-    user.setEmail(request.getNewEmail());
+    user.setEmail(request.getEmail());
     userRepository.save(user);
   }
 
@@ -85,7 +84,7 @@ public class AdminUserServiceImpl implements AdminUserService {
   public void deleteUserProfilePicture(Long authenticatedUserId, Long id) {
     validateId(authenticatedUserId, id);
     UserEntity user = userService.findUserById(id);
-    if (user.getProfilePictureUrl() == null) throw new ApiException(BAD_REQUEST, "User does not have a profile picture");
+    if (user.getProfilePictureUrl() == null) throw new ApiException(BAD_REQUEST, "User does not have a profile productpicture");
     user.setProfilePictureUrl(null);
     userRepository.save(user);
     fileService.deleteFile(PROFILE_PICTURE_STORAGE_LOCATION, user.getReferenceId() + ".png");
@@ -95,7 +94,7 @@ public class AdminUserServiceImpl implements AdminUserService {
   public void toggleUserAccountLock(Long authenticatedUserId, Long id, boolean locked) {
     validateId(authenticatedUserId, id);
     UserEntity user = userService.findUserById(id);
-    if (Objects.equals(!user.isAccountNonLocked(), locked)) throw new ApiException(BAD_REQUEST, "User's account is already " + (locked ? "locked" : "unlocked"));
+    if (!user.isAccountNonLocked() == locked) throw new ApiException(BAD_REQUEST, "User's account is already " + (locked ? "locked" : "unlocked"));
     user.setAccountNonLocked(!locked);
     userRepository.save(user);
   }
@@ -114,11 +113,11 @@ public class AdminUserServiceImpl implements AdminUserService {
   @Override
   public void updateUserRole(Long authenticatedUserId, Long id, UserRoleUpdateRequest request) {
     validateId(authenticatedUserId, id);
-    if (Objects.equals(request.getId(), SYSTEM_ROLE_ID)) throw new ApiException(FORBIDDEN, "Interactions with system role are not allowed");
-    if (Objects.equals(request.getId(), ADMIN_ROLE_ID)) throw new ApiException(FORBIDDEN, "Interactions with admin role are not allowed");
+    if (Objects.equals(request.getRoleId(), SYSTEM_ROLE_ID)) throw new ApiException(FORBIDDEN, "Interactions with system role are not allowed");
+    if (Objects.equals(request.getRoleId(), ADMIN_ROLE_ID)) throw new ApiException(FORBIDDEN, "Interactions with admin role are not allowed");
 
     UserEntity user = userService.findUserById(id);
-    RoleEntity role = roleService.findRoleById(request.getId());
+    RoleEntity role = roleService.findRoleById(request.getRoleId());
     user.setRole(role);
     userRepository.save(user);
   }

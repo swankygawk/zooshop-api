@@ -12,7 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.sfu.zooshop.entity.UserEntity;
-import ru.sfu.zooshop.mapper.system.SystemMapper;
+import ru.sfu.zooshop.mapper.SystemMapper;
 import ru.sfu.zooshop.security.user.AuthenticatedUser;
 import ru.sfu.zooshop.service.JwtService;
 import ru.sfu.zooshop.service.UserService;

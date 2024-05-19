@@ -10,6 +10,7 @@ import ru.sfu.zooshop.dto.response.user.role.ProfileRoleResponse;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileResponse extends UserAuditResponse {
+  private Long id;
   private String userId;
   private String email;
   private ProfileCredentialResponse credential;

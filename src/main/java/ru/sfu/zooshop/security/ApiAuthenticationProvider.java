@@ -6,7 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import ru.sfu.zooshop.entity.UserEntity;
-import ru.sfu.zooshop.mapper.system.SystemMapper;
+import ru.sfu.zooshop.mapper.SystemMapper;
 import ru.sfu.zooshop.security.user.AuthenticatedUser;
 import ru.sfu.zooshop.service.AuthService;
 import ru.sfu.zooshop.service.CredentialService;
